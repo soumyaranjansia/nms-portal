@@ -12,6 +12,14 @@ if (isset($_POST['add_block'])) {
 ?>
 
 <div class="container-fluid">
+    <?php if(isset($_SESSION['block_added'])){
+        block_added();
+        header('refresh:3');
+    }
+    else if(isset($_SESSION['block_exist'])){
+        block_exist();
+        header('refresh:3');
+    }?>
     <div class="row mt-2">
         <div class="col-sm-6 p-5">
             <form action="" method="post" class="form-control p-4">

@@ -1,3 +1,4 @@
+<?php include "db_con.php";?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,7 +39,8 @@
                     </li>
                 </ul>
 
-                <a class="btn btn-primary" href="device_login.php">Login</a>
+                <a class="btn btn-primary" href="device_login.php"><?php if(isset($_SESSION['district_name'])){echo $_SESSION['district_name'].'&nbsp'.'Agent';}
+                else{ echo "Login";}?></a>
             </div>
         </div>
     </nav>

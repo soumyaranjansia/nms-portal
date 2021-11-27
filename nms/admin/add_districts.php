@@ -6,11 +6,17 @@
 if (isset($_POST['add_district'])) {
     $district_name = $_POST['district'];
     addNewDistrict($district_name);
+    header("refresh:3");
 }
-
 ?>
 
 <div class="container-fluid">
+    <?php
+    if(isset($_SESSION['added_district'])){
+        district_added();
+    }
+    ?>
+    
     <div class="row mt-2">
         <div class="col-sm-6 p-5">
             <form action="" method="post" class="form-control p-4">

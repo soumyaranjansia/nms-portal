@@ -88,5 +88,9 @@ function data_added()
     echo '<p>' . $_SESSION['added'] . '</p></div>';
     unset($_SESSION['added']);
 }
-
+function admin_error(){
+    echo '<div style="text:align-center" class="alert alert-danger">';
+    echo '<p>'.$_SESSION['admin_error'].'</p></div>';
+    unset($_SESSION['admin_error']);
+}
 ?>

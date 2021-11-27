@@ -1,6 +1,9 @@
 <?php include "includes/db_con.php"; ?>
-<?php session_start(); ?>
 <?php include "includes/header.php"; ?>
+<?php include "functions.php"; ?>
+<?php if (isset($_SESSION['district_name'])) {
+    header('location:admin/index.php');
+} ?>
 <?php
 
 if (isset($_POST['login'])) {
@@ -16,24 +19,21 @@ if (isset($_POST['login'])) {
                 $_SESSION['district_name'] = "Admin";
                 header("location: /nms/admin/index.php");
             } else {
-                echo "Admin Creadential are wrong!";
+                $_SESSION['admin_error'] = "credentials are wrong,Try again";
+                header("refresh:2");
             }
             break;
         case "agent":
-            $query = "SELECT * FROM loginiot WHERE username = '$username'";
+            $query = "SELECT * FROM loginiot WHERE username = '$username' and passwd='$passwd'";
             $result = mysqli_query($connection, $query);
             if ($result->num_rows > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
-                    if ($passwd == $row['passwd']) {
-                        echo "Login Sucessfull";
-                        $_SESSION['district_name'] = $row['district_name'];
-                        header("location: /nms/admin/index.php");
-                    } else {
-                        echo "Invalid Creadentials!! Login failed";
-                    }
+                    $_SESSION['district_name'] = $row['district_name'];
+                    header("location: /nms/admin/index.php");
                 }
             } else {
-                echo "Incorrect Username or Password" . mysqli_error($connection);
+                $_SESSION['admin_error'] = "Invalid Creadentials!! Login failed";
+                header("refresh:2");
             }
             break;
         default:
@@ -45,6 +45,11 @@ if (isset($_POST['login'])) {
 
 
 <div class="container">
+    <?php
+    if (isset($_SESSION['admin_error'])) {
+        admin_error();
+    }
+    ?>
     <div class="row">
 
         <div class="col-sm-6">

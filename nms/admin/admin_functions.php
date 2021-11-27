@@ -4,11 +4,11 @@
 function addNewDistrict($district_name)
 {
     global $connection;
-    $add_dist_query = "INSERT INTO districts (district_name) VALUES ('$district_name')";
+    $add_dist_query = "INSERT INTO districts (district_name) SELECT '$district_name' WHERE NOT EXISTS(select * from districts where district_name='$district_name')";
     $dist_added = mysqli_query($connection, $add_dist_query);
 
     if ($dist_added == true) {
-        echo 'District added Successfully';
+        $_SESSION['added_district']='District added Successfully';
     } else {
         echo 'Error : ' . mysqli_error($connection);
     }
@@ -58,12 +58,12 @@ function addNewBlock($dist_name, $block_name)
     $checkin = "SELECT * FROM block WHERE district_name='$dist_name' and block_name='$block_name'";
     $checkin_q = mysqli_query($connection, $checkin);
     if (mysqli_num_rows($checkin_q) > 0) {
-        echo "block already exists";
+        $_SESSION['block_exist']="Block Already Exists";
     } else {
         $add_block_query = "INSERT INTO block (district_name, block_name) VALUES ('$dist_name', '$block_name')";
         $block_added = mysqli_query($connection, $add_block_query);
         if ($block_added == true) {
-            echo 'Block added Successfully';
+            $_SESSION['block_added']='Block Added Successfully';
         } else {
             echo 'Error : ' . mysqli_error($connection);
         }
@@ -122,4 +122,22 @@ function data_added()
     unset($_SESSION['added']);
 }
 
+function district_added()
+{
+    echo '<div class="alert alert-success">';
+    echo '<p>' . $_SESSION['added_district'] . '</p></div>';
+    unset($_SESSION['added_district']);
+}
+function block_added()
+{
+    echo '<div class="alert alert-success">';
+    echo '<p>' . $_SESSION['block_added'] . '</p></div>';
+    unset($_SESSION['block_added']);
+}
+function block_exist()
+{
+    echo '<div class="alert alert-danger">';
+    echo '<p>' . $_SESSION['block_exist'] . '</p></div>';
+    unset($_SESSION['block_exist']);
+}
 ?>

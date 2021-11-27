@@ -1,7 +1,9 @@
 <?php include "includes/db_con.php"; ?>
 <?php include "includes/header.php"; ?>
 <?php include "admin_functions.php"; ?>
-
+<?php if(!isset($_SESSION['district_name'])){
+    header('location:../index.php');
+}?>
 <?php
 
 if (isset($_POST['upload'])) {
@@ -15,19 +17,22 @@ if (isset($_POST['upload'])) {
     $average = ($day_value + $night_value) / 2;
 
     /* query for cheecking the value is exists or not */
-    $rtq = "select * from noise_value where district_name='$dist_name' and block_name='$block_name' and day_value='$day_value' and night_value='$night_value' and date='$date'";
+    $rtq = "SELECT * FROM noise_value where district_name='$dist_name' and block_name='$block_name' and date='$date'";
 
     $wrq = mysqli_query($connection, $rtq);
     if (mysqli_num_rows($wrq) > 0) {
-        $_SESSION['exist'] = 'Data already Exists';
+        $_SESSION['exist'] = 'Data Already Exists';
+        data_exists();
         header('refresh:2');
+        
     } else {
+   
         $query = "INSERT INTO noise_value (district_name, block_name, day_value, night_value, date, average) VALUES ('$dist_name','$block_name','$day_value', '$night_value', '$date', '$average')";
 
         $result = mysqli_query($connection, $query);
 
         if ($result == true) {
-            $_SESSION['added'] = "Data successfully added";
+            $_SESSION['added'] = "Data Successfully Added";
             header('refresh:2');
             data_added();
         } else {
